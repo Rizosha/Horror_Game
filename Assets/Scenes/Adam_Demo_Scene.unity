@@ -10860,6 +10860,7 @@ GameObject:
   - component: {fileID: 5290936582265842967}
   - component: {fileID: 5290936582265842966}
   - component: {fileID: 5290936582265842969}
+  - component: {fileID: 5290936582265842970}
   m_Layer: 0
   m_Name: horrorcha_rig
   m_TagString: Player
@@ -10942,6 +10943,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   interactionText: {fileID: 1638338612}
+--- !u!114 &5290936582265842970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5290936582265842965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7850f123ba537e544a3551aac3604933, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Inventory
+  playerInventory: []
+  inventorySlots: 6
+  addItemToInventoryTest: 0
+  removeItemFromInventoryTest: 0
+  inventoryItemToAddTest:
+    itemData: {fileID: 11400000, guid: 5a5e3a4ec516e6345ad8d901f7dfa71b, type: 2}
+    quantity: 1
+  inventoryItemToRemoveTest:
+    itemData: {fileID: 11400000, guid: 5a5e3a4ec516e6345ad8d901f7dfa71b, type: 2}
+    quantity: 1
+  quantityToAdd: 6
+  quantityToRemove: 5
 --- !u!114 &5304097128832127440
 MonoBehaviour:
   m_ObjectHideFlags: 0
