@@ -3,13 +3,12 @@ using UnityEngine;
 public class BookInteractable : MonoBehaviour, Interfaces.IInteractable
 {
     [SerializeField] private Inventory.InventoryItem item;
-    [SerializeField] private int amountToAdd;
     
     public void Interact()
     {
         Debug.Log("Interaction happened");
         
-        var leftover = Inventory.Instance.AddItemToInventory(item, amountToAdd);
+        var leftover = Inventory.Instance.AddItemToInventory(item, item.quantity);
         if (leftover <= 0)
         {
             Destroy(gameObject);
@@ -17,7 +16,7 @@ public class BookInteractable : MonoBehaviour, Interfaces.IInteractable
         }
         else
         {
-            amountToAdd = leftover;
+            item.quantity = leftover;
             Inventory.Instance.UpdateInventoryIcons();
             Debug.Log($"The inventory was full this item has {leftover} amount to be added to the inventory");
         }
