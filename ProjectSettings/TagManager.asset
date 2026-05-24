@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - HotbarImage
+  - HotbarText
   layers:
   - Default
   - TransparentFX

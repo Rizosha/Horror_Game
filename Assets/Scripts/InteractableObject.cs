@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BookInteractable : MonoBehaviour, Interfaces.IInteractable
+public class InteractableObject : MonoBehaviour, Interfaces.IInteractable
 {
     [SerializeField] private Inventory.InventoryItem item;
     
