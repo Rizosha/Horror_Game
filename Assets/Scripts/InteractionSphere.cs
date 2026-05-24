@@ -9,21 +9,28 @@ public class InteractionSphere : MonoBehaviour
     private Interfaces.IInteractable _currentInteractable;
     public TextMeshProUGUI interactionText;
 
+    private InputSystem_Actions _playerInputActions;
+    
     private void Start()
     {
         _characterController = GetComponent<CharacterController>();
+    }
+    
+    private void Awake()
+    {
+        _playerInputActions = new InputSystem_Actions();
+    }
+
+    private void OnEnable()
+    {
+        _playerInputActions.Enable();
+        _playerInputActions.Player.Interact.performed += AttemptInteraction;
     }
     
     // Update is called once per frame
     private void Update()
     {
         CheckForInteractable();
-        // TODO: Change this to input system
-        if (Keyboard.current.eKey.wasPressedThisFrame)
-        {
-            Debug.LogError("Pressed");
-            AttemptInteraction();
-        }
     }
 
     // Uses a box overlap to check for objects with a script containing the IInteractable interface
@@ -73,8 +80,10 @@ public class InteractionSphere : MonoBehaviour
         interactionText.text = "";
     }
 
-    private void AttemptInteraction()
+    private void AttemptInteraction(InputAction.CallbackContext context)
     {
+        Debug.LogError("E was pressed");
+        
         if (_currentInteractable != null)
         {
             _currentInteractable.Interact();

@@ -363,7 +363,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   item:
     itemData: {fileID: 11400000, guid: eb5823ea1e2403d48b6c5f88dff5397a, type: 2}
-    quantity: 151
+    quantity: 0
+  amountToAdd: 29
 --- !u!65 &297767830
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11646,13 +11647,13 @@ MonoBehaviour:
   addItemToInventoryTest: 0
   removeItemFromInventoryTest: 0
   inventoryItemToAddTest:
-    itemData: {fileID: 11400000, guid: 5a5e3a4ec516e6345ad8d901f7dfa71b, type: 2}
-    quantity: 1
+    itemData: {fileID: 11400000, guid: eb5823ea1e2403d48b6c5f88dff5397a, type: 2}
+    quantity: 201
   inventoryItemToRemoveTest:
-    itemData: {fileID: 11400000, guid: 5a5e3a4ec516e6345ad8d901f7dfa71b, type: 2}
+    itemData: {fileID: 11400000, guid: eb5823ea1e2403d48b6c5f88dff5397a, type: 2}
     quantity: 1
-  quantityToAdd: 6
-  quantityToRemove: 5
+  quantityToAdd: 201
+  quantityToRemove: 99
 --- !u!114 &5304097128832127440
 MonoBehaviour:
   m_ObjectHideFlags: 0

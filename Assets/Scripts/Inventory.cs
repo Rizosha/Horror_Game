@@ -90,71 +90,76 @@ public class Inventory : Singleton<Inventory>
         }
     }
     
-    public void AddItemToInventory(InventoryItem item, int quantity)
+    public int AddItemToInventory(InventoryItem item, int quantity)
     {
-        if (playerInventory.Count >= inventorySlots)
+        if (CheckIfInventoryIsFull())
         {
-            Debug.LogWarning("Inventory is full");
-            return;
-            // Maybe add visible feedback through UI here
+            return quantity;
+            // TODO: Add feedback that inventory is full and then change the pickup item to grant the changed amount of the item
         }
 
-        if (playerInventory.Count < inventorySlots)
+        float amountToAddOverall = quantity;
+        item.quantity = item.itemData.maxStack; // How many are in a stack of the item
+        var stacksToAdd = amountToAddOverall / item.itemData.maxStack;
+        var stacksToAddRounded = Mathf.Ceil(stacksToAdd);
+        var totalStacks = stacksToAddRounded;
+        
+        if (item.itemData.stackable)
         {
-            if (item.itemData.stackable)
+            Debug.LogError($"Item is stackable, we have {stacksToAdd} stacks, we have an item quantity to add of {item.quantity} and a max stack of {item.itemData.maxStack}, and an overall of {amountToAddOverall}");
             {
-                item.quantity = quantity;
-
-                if (item.quantity >= item.itemData.maxStack)
+                for (var i = 0; i < totalStacks; i++)
                 {
-                    float amountToAdd = item.quantity;
-                    
-                    // Add one stack
-                    item.quantity = item.itemData.maxStack;
-                    playerInventory.Add(item);
-
-                    amountToAdd -= item.itemData.maxStack;
-                    Debug.LogError(amountToAdd);
-                    var stacksToAdd = amountToAdd /  item.itemData.maxStack;
-                    var stacksToAddRoundedUp = Mathf.Ceil(stacksToAdd);
-                    Debug.LogError(stacksToAddRoundedUp);
-
-                    for (var i = 0; i < stacksToAddRoundedUp; i++)
+                    if (CheckIfInventoryIsFull())
                     {
-                        if (stacksToAddRoundedUp > 1)
-                        {
-                            stacksToAddRoundedUp--;
-                            amountToAdd -= item.itemData.maxStack;
-                            playerInventory.Add(item);
-                        }
-                        if (stacksToAddRoundedUp == 1) // Sort out the final not full stack
-                        {
-                            item.quantity = (int)amountToAdd;
-                            Debug.LogError($"Final stack {amountToAdd}");
-                            playerInventory.Add(item);
-                        }
+                        return HandleInventoryOverflow((int)amountToAddOverall);
+                    }
+
+                    if (stacksToAddRounded > 1)
+                    {
+                        stacksToAddRounded--;
+                        amountToAddOverall -= item.itemData.maxStack;
+                        Debug.LogError($"overall amount now: {amountToAddOverall}, deducted {item.itemData.maxStack}");
+                        playerInventory.Add(item);
+                    }
+                    else if (stacksToAddRounded == 1)
+                    {
+                        item.quantity = (int)amountToAddOverall;
+                        Debug.LogError($"Final stack {amountToAddOverall}");
+                        playerInventory.Add(item);
+
+                        amountToAddOverall = 0; // Ensure that the pickup item deletes itself
                     }
                 }
             }
-            
-            else
+        }
+        if (!item.itemData.stackable)
+        {
+            for (var i = 0; i < quantity; i++)
             {
-                for (var i = 0; i < quantity; i++)
+                if (playerInventory.Count >= inventorySlots)
                 {
-                    if (playerInventory.Count >= inventorySlots)
-                    {
-                        Debug.Log("Possible overflow items not added to inventory");
-                        // TODO: Sort this out
-                        // - Item is left on ground with pickup quantity reduced?
-                        break;
-                    }
-                    
-                    playerInventory.Add(item);
-                }      
+                    return HandleInventoryOverflow((int)amountToAddOverall);
+                } 
+                
+                amountToAddOverall -= item.itemData.maxStack;
+                playerInventory.Add(item);
             }
         }
         
         UpdateInventoryIcons();
+        return (int)amountToAddOverall;
+    }
+
+    private bool CheckIfInventoryIsFull()
+    {
+        return playerInventory.Count >= inventorySlots;
+    }
+
+    private int HandleInventoryOverflow(int amount)
+    {
+        Debug.Log("There are inventory overflow items");
+        return amount;
     }
 
     public void RemoveItemFromInventory(InventoryItem item, int quantity)
@@ -188,7 +193,7 @@ public class Inventory : Singleton<Inventory>
         UpdateInventoryIcons();
     }
     
-    private void UpdateInventoryIcons()
+    public void UpdateInventoryIcons()
     {
         var sprites = new List<Sprite>();
         sprites.Clear();
